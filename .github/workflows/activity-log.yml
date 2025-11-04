@@ -5,6 +5,9 @@ on:
     - cron: '0 8,12,16,20 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write    # ✅ 讓 GitHub Token 有權限修改 README.md
+
 jobs:
   update:
     runs-on: ubuntu-latest
