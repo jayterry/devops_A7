@@ -1,38 +1,36 @@
-name: Update Activity Log 🪄
+name: Update Activity Log ✨
 
 on:
   schedule:
-    - cron: '0 8,12,16,20 * * *'   # 每天 8am、12pm、4pm、8pm 自動更新
+    - cron: '0 8,12,16,20 * * *'
   workflow_dispatch:
-  push:
-    branches: [ main ]
 
 jobs:
-  update-activity:
+  update:
     runs-on: ubuntu-latest
     steps:
-      - name: 🧭 Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🪶 Generate recent activity
+      - name: Generate recent activity
         uses: Readme-Workflows/recent-activity@main
         with:
-          GH_TOKEN: ${{ secrets.TOKEN }}
+          GH_USERNAME: jayterry
           CONFIG_FILE: .github/activity-config.yml
 
-      - name: 🕓 Add timestamp to README
+      - name: Update timestamp
         run: |
           DATE=$(date +"%Y-%m-%d %H:%M:%S")
           if grep -q "Last updated:" README.md; then
             sed -i "s|Last updated: .*|Last updated: ${DATE} (UTC)|" README.md
           else
-            echo -e "\n\n---\n🕒 **Last updated:** ${DATE} (UTC)" >> README.md
+            echo -e "\n\n🕒 **Last updated:** ${DATE} (UTC)" >> README.md
           fi
 
-      - name: 💾 Commit and push changes
+      - name: Commit and push changes
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add README.md
-          git commit -m "🪄 Auto-update activity log + timestamp" || echo "No changes to commit"
+          git commit -m "🪄 Auto-update activity log + timestamp" || echo "No changes"
           git push
