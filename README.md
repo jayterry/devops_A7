@@ -1,14 +1,8 @@
-# My DevOps GitHub Pages 🧑‍💻
+## ✨ My GitHub Activity Log
 
-This site automatically updates with my recent GitHub activity.  
-Below is my latest activity log with custom emojis and timestamps!  
+Here’s a list of my latest GitHub activities automatically updated every few hours 🚀
 
----
+<!--RECENT_ACTIVITY:start-->
+<!--RECENT_ACTIVITY:end-->
 
-## ✨ Recent Activity
-<!--START_SECTION:activity-->
-<!--END_SECTION:activity-->
-
----
-
-🕒 **Last updated:** (自動生成時間)
+📅 **Last updated:** _(auto-updated by GitHub Actions)_
