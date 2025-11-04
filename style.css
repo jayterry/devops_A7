@@ -1,144 +1,122 @@
-/* Pac-Man Neon Arcade Theme 👾 */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-:root {
-  --bg: #000000;
-  --grid: #0c0c26;
-  --yellow: #ffe800;
-  --blue: #00aaff;
-  --pink: #ff69b4;
-  --red: #ff4444;
-  --white: #f8f8f8;
-  --shadow: 0 0 10px rgba(255, 255, 0, 0.6);
+/* --- 1. 整體頁面/遊戲容器設定 (深色背景與復古字體) --- */
+body {
+    background-color: #111; /* 深黑/深藍色背景 */
+    color: #FFF; /* 白色文字 */
+    font-family: 'Press Start 2P', 'Courier New', monospace; /* 嘗試使用復古風格字體 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background-color: var(--bg);
-  color: var(--white);
-  font-family: 'Press Start 2P', monospace;
-  font-size: 12px;
-  line-height: 1.8;
+.pacman-game-container {
+    background-color: #00008B; /* 深藍色遊戲區域背景 */
+    border: 4px solid #FFD700; /* 金黃色邊框 */
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8); /* 發光的黃色陰影 */
+    max-width: 800px;
+    width: 100%;
+    border-radius: 10px;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.03) 75%, rgba(255, 255, 255, 0.03) 76%, transparent 77%, transparent),
-    linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.03) 75%, rgba(255, 255, 255, 0.03) 76%, transparent 77%, transparent);
-  background-size: 50px 50px;
-  z-index: 0;
-  opacity: 0.3;
+/* --- 2. 計分板/文字樣式 --- */
+.score-board {
+    color: #FFD700; /* 黃色分數 */
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px #FFA500; /* 橘色文字陰影 */
 }
 
-.container {
-  position: relative;
-  z-index: 1;
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-}
-
-h1, h2, h3 {
-  color: var(--yellow);
-  text-shadow: var(--shadow);
-  letter-spacing: 2px;
-}
-
-a {
-  color: var(--blue);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--yellow);
-}
-
-.card {
-  background-color: rgba(20, 20, 40, 0.8);
-  border: 2px solid var(--blue);
-  border-radius: 12px;
-  padding: 20px;
-  margin: 20px 0;
-  box-shadow: 0 0 15px rgba(0, 170, 255, 0.4);
-  transition: transform 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(255, 232, 0, 0.6);
-}
-
-ul, li {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-li::before {
-  content: "• ";
-  color: var(--yellow);
-}
-
-button, .btn {
-  font-family: 'Press Start 2P', monospace;
-  background: var(--blue);
-  color: var(--white);
-  border: 2px solid var(--yellow);
-  border-radius: 10px;
-  padding: 8px 14px;
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(0, 170, 255, 0.6);
-  transition: all 0.15s ease;
-}
-
-button:hover, .btn:hover {
-  background: var(--yellow);
-  color: var(--bg);
-  box-shadow: 0 0 12px rgba(255, 232, 0, 0.8);
-}
-
-/* Pac-Man animation bar */
-.pacbar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 20px 0;
-}
-
+/* --- 3. Pac-Man 角色樣式 --- */
 .pacman {
-  width: 0;
-  height: 0;
-  border-right: 20px solid transparent;
-  border-top: 20px solid var(--yellow);
-  border-left: 20px solid var(--yellow);
-  border-bottom: 20px solid var(--yellow);
-  border-radius: 20px;
-  animation: eat 0.5s infinite alternate;
+    width: 50px;
+    height: 50px;
+    background-color: #FFFF00; /* 鮮豔的黃色 */
+    border-radius: 50%;
+    position: relative;
+    /* 創造嘴巴效果：使用 CSS clip-path 模擬旋轉的嘴巴 */
+    clip-path: polygon(50% 50%, 100% 35%, 100% 65%); 
+    /* 初始方向向右，嘴巴張開角度約 45 度 */
+    transform: rotate(0deg);
+    transition: transform 0.1s ease-out;
 }
 
-.dot {
-  width: 10px;
-  height: 10px;
-  background: var(--white);
-  border-radius: 50%;
-  margin-left: 20px;
-  box-shadow: 0 0 8px var(--white);
+/* 假設您想讓它動起來：可以利用 :active 或 JS class 來改變 transform */
+.pacman.moving-right {
+    transform: rotate(0deg);
+}
+.pacman.moving-up {
+    transform: rotate(-90deg);
+}
+.pacman.moving-left {
+    transform: rotate(180deg);
+}
+.pacman.moving-down {
+    transform: rotate(90deg);
 }
 
-@keyframes eat {
-  0% { clip-path: polygon(50% 50%, 100% 0%, 100% 100%); }
-  100% { clip-path: polygon(50% 50%, 100% 20%, 100% 80%); }
+/* 嘴巴動畫 (更進階，需要額外設定嘴巴的開合) */
+/* 這裡只做簡單的靜態模擬，如果要動畫請加入 keyframes */
+
+/* --- 4. 豆子 (Pellet) 樣式 --- */
+.pellet {
+    width: 10px;
+    height: 10px;
+    background-color: #FFF; /* 白色或淺黃色小豆子 */
+    border-radius: 50%;
+    box-shadow: 0 0 3px #FFF;
 }
 
-footer {
-  text-align: center;
-  margin-top: 50px;
-  opacity: 0.8;
-  font-size: 10px;
-  color: var(--pink);
+/* 力量豆 (Power Pellet) 樣式 */
+.power-pellet {
+    width: 18px;
+    height: 18px;
+    background-color: #FFC0CB; /* 粉紅色/淡紅色 */
+    border-radius: 50%;
+    box-shadow: 0 0 10px #FF00FF; /* 強烈閃爍效果 */
+    animation: flash 0.5s infinite alternate;
 }
+
+@keyframes flash {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.5;
+    }
+}
+
+/* --- 5. 幽靈 (Ghost) 基礎樣式 (例如 Blinky) --- */
+.ghost {
+    width: 35px;
+    height: 45px;
+    background-color: #FF0000; /* Blinky 紅色 */
+    border-radius: 50% 50% 0 0; /* 圓頂 */
+    position: relative;
+}
+
+/* 幽靈底部波浪形狀 (模擬鋸齒狀) */
+.ghost::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 5px,
+            var(--ghost-color, #FF0000) 5px,
+            var(--ghost-color, #FF0000) 10px
+        );
+    /* 為了讓它看起來像鋸齒，需要調整 gradient 組合，這裡是一個簡化版 */
+    /* 更精確的鋸齒可能需要多個元素或複雜的 mask/clip-path */
+}
+
+/* 眼睛樣式可以通過在 :before 或 :after 裡添加兩個小圓實現 */
