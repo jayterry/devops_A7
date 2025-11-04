@@ -37,7 +37,7 @@ jobs:
       # 🕒 Step 3. 更新時間戳與部署時間
       - name: Update timestamps
         run: |
-          DATE=$(date -u -d "+8 hours" +"%Y-%m-%d %H:%M:%S")
+          DATE=$(TZ='Asia/Taipei' date '+%Y-%m-%d %H:%M:%S')
           if grep -q "Last updated:" README.md; then
             sed -i "s|Last updated: .*|Last updated: ${DATE} (UTC+8)|" README.md
           else
