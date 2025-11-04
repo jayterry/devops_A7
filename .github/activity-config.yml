@@ -1,0 +1,8 @@
+# Custom configuration for Readme-Workflows/recent-activity
+max_lines: 8
+template: |
+  | 🗓️ Date | 🏷️ Activity |
+  |----------|-------------|
+  {% for event in events %}
+  | {{ event.created_at | date("Y-%m-%d") }} | {{ event.action }} **{{ event.repo.name }}** |
+  {% endfor %}
