@@ -1,122 +1,112 @@
-/* --- 1. 整體頁面/遊戲容器設定 (深色背景與復古字體) --- */
-body {
-    background-color: #111; /* 深黑/深藍色背景 */
-    color: #FFF; /* 白色文字 */
-    font-family: 'Press Start 2P', 'Courier New', monospace; /* 嘗試使用復古風格字體 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
+/*
+ * Pac-Man 復古迷宮風格 CSS
+ * 特點：深色背景、螢光藍色邊框牆壁、白色圓點。
+ */
+
+/* 定義顏色變數，方便調整 */
+:root {
+    --color-background: #000000;      /* 黑色背景 */
+    --color-wall: #0000FF;            /* 經典藍色牆壁 */
+    --color-wall-glow: #00FFFF;        /* 青藍色光暈 */
+    --color-pellet: #FFFFFF;          /* 白色小豆子 */
+    --color-power-pellet: #FFD700;    /* 金黃色力量豆 */
+    --color-text: #FFD700;            /* 黃色分數文字 */
+    --font-retro: 'Press Start 2P', 'Courier New', monospace;
 }
 
-.pacman-game-container {
-    background-color: #00008B; /* 深藍色遊戲區域背景 */
-    border: 4px solid #FFD700; /* 金黃色邊框 */
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8); /* 發光的黃色陰影 */
-    max-width: 800px;
-    width: 100%;
-    border-radius: 10px;
-}
-
-/* --- 2. 計分板/文字樣式 --- */
-.score-board {
-    color: #FFD700; /* 黃色分數 */
-    font-size: 1.5em;
-    text-align: center;
-    margin-bottom: 20px;
-    text-shadow: 0 0 5px #FFA500; /* 橘色文字陰影 */
-}
-
-/* --- 3. Pac-Man 角色樣式 --- */
-.pacman {
-    width: 50px;
-    height: 50px;
-    background-color: #FFFF00; /* 鮮豔的黃色 */
-    border-radius: 50%;
+/* 1. 遊戲區域容器 (模擬迷宮外框) */
+.maze-container {
+    background-color: var(--color-background);
+    width: 600px; /* 迷宮寬度 */
+    height: 400px; /* 迷宮高度 */
+    margin: 50px auto;
+    /* 模擬牆壁的藍色發光邊框 */
+    border: 3px solid var(--color-wall);
+    box-shadow: 0 0 15px var(--color-wall-glow); /* 發光效果 */
     position: relative;
-    /* 創造嘴巴效果：使用 CSS clip-path 模擬旋轉的嘴巴 */
-    clip-path: polygon(50% 50%, 100% 35%, 100% 65%); 
-    /* 初始方向向右，嘴巴張開角度約 45 度 */
-    transform: rotate(0deg);
-    transition: transform 0.1s ease-out;
+    overflow: hidden;
+    border-radius: 5px; /* 輕微圓角 */
 }
 
-/* 假設您想讓它動起來：可以利用 :active 或 JS class 來改變 transform */
-.pacman.moving-right {
-    transform: rotate(0deg);
-}
-.pacman.moving-up {
-    transform: rotate(-90deg);
-}
-.pacman.moving-left {
-    transform: rotate(180deg);
-}
-.pacman.moving-down {
-    transform: rotate(90deg);
+/* 2. 簡化牆壁/路徑樣式 (使用 DIV 模擬內部線條，如果不需要複雜結構可移除此區塊) */
+.maze-wall-segment {
+    position: absolute;
+    background-color: transparent; /* 內部透明 */
+    border: 3px solid var(--color-wall);
+    border-radius: 8px; /* 圓角邊框 */
+    box-shadow: 0 0 8px var(--color-wall-glow);
 }
 
-/* 嘴巴動畫 (更進階，需要額外設定嘴巴的開合) */
-/* 這裡只做簡單的靜態模擬，如果要動畫請加入 keyframes */
+/* 範例：內部 L 形牆壁 (需要搭配 HTML 元素) */
+/*
+.wall-horizontal { top: 100px; left: 50px; width: 150px; height: 0; }
+.wall-vertical { top: 100px; left: 200px; width: 0; height: 100px; }
+*/
 
-/* --- 4. 豆子 (Pellet) 樣式 --- */
+/* 3. 豆子 (Pellet) 樣式 */
 .pellet {
-    width: 10px;
-    height: 10px;
-    background-color: #FFF; /* 白色或淺黃色小豆子 */
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: var(--color-pellet);
     border-radius: 50%;
-    box-shadow: 0 0 3px #FFF;
+    /* 確保豆子在黑暗背景下可見 */
+    box-shadow: 0 0 2px var(--color-pellet);
 }
 
 /* 力量豆 (Power Pellet) 樣式 */
 .power-pellet {
-    width: 18px;
-    height: 18px;
-    background-color: #FFC0CB; /* 粉紅色/淡紅色 */
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-power-pellet);
     border-radius: 50%;
-    box-shadow: 0 0 10px #FF00FF; /* 強烈閃爍效果 */
-    animation: flash 0.5s infinite alternate;
+    box-shadow: 0 0 10px var(--color-power-pellet);
+    /* 閃爍動畫，增加電玩感 */
+    animation: pellet-pulse 0.8s infinite alternate;
 }
 
-@keyframes flash {
+@keyframes pellet-pulse {
     from {
         opacity: 1;
+        transform: scale(1.0);
     }
     to {
-        opacity: 0.5;
+        opacity: 0.6;
+        transform: scale(1.2);
     }
 }
 
-/* --- 5. 幽靈 (Ghost) 基礎樣式 (例如 Blinky) --- */
-.ghost {
-    width: 35px;
-    height: 45px;
-    background-color: #FF0000; /* Blinky 紅色 */
-    border-radius: 50% 50% 0 0; /* 圓頂 */
-    position: relative;
+/* 4. 文本/計分板樣式 */
+.score-display {
+    font-family: var(--font-retro);
+    color: var(--color-text);
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 15px;
+    /* 復古文字陰影 */
+    text-shadow: 0 0 5px var(--color-text);
 }
 
-/* 幽靈底部波浪形狀 (模擬鋸齒狀) */
-.ghost::after {
-    content: '';
+/* 5. Pac-Man 角色基礎樣式 */
+.pacman {
+    width: 30px;
+    height: 30px;
+    background-color: #FFFF00; /* 鮮豔黃色 */
+    border-radius: 50%;
+    /* 嘴巴開口效果 */
+    clip-path: polygon(50% 50%, 100% 35%, 100% 65%);
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 15px;
-    background: 
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 5px,
-            var(--ghost-color, #FF0000) 5px,
-            var(--ghost-color, #FF0000) 10px
-        );
-    /* 為了讓它看起來像鋸齒，需要調整 gradient 組合，這裡是一個簡化版 */
-    /* 更精確的鋸齒可能需要多個元素或複雜的 mask/clip-path */
+    z-index: 10;
 }
 
-/* 眼睛樣式可以通過在 :before 或 :after 裡添加兩個小圓實現 */
+/* 6. 幽靈 (Ghost) 基礎樣式 */
+.ghost {
+    width: 30px;
+    height: 38px;
+    background-color: #FF0000; /* 例如 Blinky 紅色 */
+    border-radius: 50% 50% 0 0;
+    position: absolute;
+    z-index: 9;
+    border: 1px solid #FFF; /* 增加邊緣細節 */
+}
