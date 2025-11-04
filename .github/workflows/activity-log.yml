@@ -47,19 +47,20 @@ jobs:
       - name: Update timestamps (UTC+8)
         shell: bash
         run: |
-          # 1️⃣ 取得台北時間 (比 -d "+8 hours" 穩定)
+          # 1️⃣ 取得台北時區的時間
           DATE=$(TZ='Asia/Taipei' date '+%Y-%m-%d %H:%M:%S')
           TIMEZONE_LABEL="(UTC+8)"
-
           echo "🕒 Current time: $DATE $TIMEZONE_LABEL"
 
-          # 2️⃣ 將行尾統一為 LF，避免 Windows CRLF 導致 sed 抓不到
+          # 2️⃣ 移除 CRLF，避免格式混亂
           sed -i 's/\r$//' README.md
 
-          # 3️⃣ 使用寬鬆匹配（不論 emoji、有無空格都能抓）
-          sed -i -E "s/^.*Last updated:.*$/📅 Last updated: ${DATE} ${TIMEZONE_LABEL}/" README.md
-          sed -i -E "s/^.*Last deployed:.*$/🚀 Last deployed: ${DATE} ${TIMEZONE_LABEL}/" README.md
+          # 3️⃣ 以 Perl 方式強制更新兩行（不論前後空格或換行符）
+          perl -0777 -i -pe "s/📅 *Last updated:[^\n]*/📅 Last updated: ${DATE} ${TIMEZONE_LABEL}/" README.md
+          perl -0777 -i -pe "s/🚀 *Last deployed:[^\n]*/🚀 Last deployed: ${DATE} ${TIMEZONE_LABEL}/" README.md
 
-          # 4️⃣ 顯示修改後的內容方便除錯
-          grep 'Last updated' README.md || echo "❌ No 'Last updated' line found!"
+          # 4️⃣ Debug output
+          echo '------ Updated lines ------'
+          grep 'Last' README.md || echo '⚠️ No "Last updated" found in README.md'
+          echo '---------------------------'
 
