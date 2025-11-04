@@ -47,12 +47,19 @@ jobs:
       - name: Update timestamps (UTC+8)
         shell: bash
         run: |
-          # 取得台北時區的時間 (UTC+8)
-          DATE=$(TZ="Asia/Taipei" date +"%Y-%m-%d %H:%M:%S")
+          # 1️⃣ 取得台北時間 (比 -d "+8 hours" 穩定)
+          DATE=$(TZ='Asia/Taipei' date '+%Y-%m-%d %H:%M:%S')
           TIMEZONE_LABEL="(UTC+8)"
+
           echo "🕒 Current time: $DATE $TIMEZONE_LABEL"
 
-          # 精準替換 README 裡的時間段落（保持 emoji 一致）
-          sed -i "s|^📅 Last updated:.*|📅 Last updated: ${DATE} ${TIMEZONE_LABEL}|" README.md
-          sed -i "s|^🚀 Last deployed:.*|🚀 Last deployed: ${DATE} ${TIMEZONE_LABEL}|" README.md
+          # 2️⃣ 將行尾統一為 LF，避免 Windows CRLF 導致 sed 抓不到
+          sed -i 's/\r$//' README.md
+
+          # 3️⃣ 使用寬鬆匹配（不論 emoji、有無空格都能抓）
+          sed -i -E "s/^.*Last updated:.*$/📅 Last updated: ${DATE} ${TIMEZONE_LABEL}/" README.md
+          sed -i -E "s/^.*Last deployed:.*$/🚀 Last deployed: ${DATE} ${TIMEZONE_LABEL}/" README.md
+
+          # 4️⃣ 顯示修改後的內容方便除錯
+          grep 'Last updated' README.md || echo "❌ No 'Last updated' line found!"
 
