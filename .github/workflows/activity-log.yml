@@ -2,11 +2,11 @@ name: Update Activity Log ✨
 
 on:
   schedule:
-    - cron: '0 8,12,16,20 * * *'   # 每天 8:00、12:00、16:00、20:00 自動更新
+    - cron: '0 8,12,16,20 * * *'
   workflow_dispatch:
 
 permissions:
-  contents: write    # 允許修改 README.md
+  contents: write
 
 jobs:
   update:
@@ -22,7 +22,7 @@ jobs:
           GH_USERNAME: jayterry
           CONFIG_FILE: .github/activity-config.yml
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}   
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}    
 
 
       - name: Generate recent commits
@@ -43,17 +43,18 @@ jobs:
       - name: Update timestamps
         run: |
           DATE=$(date -u -d "+8 hours" +"%Y-%m-%d %H:%M:%S")
+          TIMEZONE_LABEL="(UTC+8)"
 
           if grep -q "Last updated:" README.md; then
-            sed -i "s|Last updated: .*|Last updated: ${DATE} (UTC)|" README.md
+            sed -i "s|Last updated: .*|Last updated: ${DATE} ${TIMEZONE_LABEL}|" README.md
           else
-            echo -e "\n📅 **Last updated:** ${DATE} (UTC)" >> README.md
+            echo -e "\n📅 **Last updated:** ${DATE} ${TIMEZONE_LABEL}" >> README.md
           fi
 
           if grep -q "Last deployed:" README.md; then
-            sed -i "s|Last deployed: .*|Last deployed: ${DATE} (UTC)|" README.md
+            sed -i "s|Last deployed: .*|Last deployed: ${DATE} ${TIMEZONE_LABEL}|" README.md
           else
-            echo -e "\n🕒 **Last deployed:** ${DATE} (UTC)" >> README.md
+            echo -e "\n🕒 **Last deployed:** ${DATE} ${TIMEZONE_LABEL}" >> README.md
           fi
 
       - name: Commit and push changes
