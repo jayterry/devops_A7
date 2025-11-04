@@ -10,9 +10,10 @@ Every few hours, this page automatically updates with my latest GitHub activitie
 
 This project was created as part of the **DevOps Assignment: Publish with GitHub Pages + Auto Activity Log**.
 
-### 🧠 Objectives
+### 🎯 Objectives
 - Automate README updates using GitHub Actions.
 - Display real-time GitHub activity logs.
+- Generate automatic changelog based on commits.
 - Sync README content to GitHub Pages automatically.
 - Demonstrate CI/CD workflow integration.
 
@@ -20,17 +21,19 @@ This project was created as part of the **DevOps Assignment: Publish with GitHub
 
 ## ✨ My GitHub Activity Log
 
-Here’s a list of my latest GitHub activities automatically updated every few hours 🚀
+Here’s a list of my latest GitHub activities automatically updated every few hours 🚀  
 
 <!--RECENT_ACTIVITY:start-->
-1. ⬆️ Pushed undefined commit(s) to [jayterry/devops_A7](https://github.com/jayterry/devops_A7)<br>
-2. ⬆️ Pushed undefined commit(s) to [jayterry/devops_A7](https://github.com/jayterry/devops_A7)<br>
-3. ⬆️ Pushed undefined commit(s) to [jayterry/devops_A7](https://github.com/jayterry/devops_A7)<br>
-4. ⬆️ Pushed undefined commit(s) to [jayterry/devops_A7](https://github.com/jayterry/devops_A7)<br>
-5. ⬆️ Pushed undefined commit(s) to [jayterry/devops_A7](https://github.com/jayterry/devops_A7)<br>
 <!--RECENT_ACTIVITY:end-->
 
-📅 **Last updated:** _(auto-updated by GitHub Actions)_
+---
+
+## 🧾 Recent Commits
+
+Below are the 5 most recent commits automatically pulled from this repository 🔄  
+
+<!--COMMITS:start-->
+<!--COMMITS:end-->
 
 ---
 
@@ -40,29 +43,20 @@ The automation process uses a custom workflow file
 located at **`.github/workflows/activity-log.yml`**, which performs:
 
 1. **Fetch recent activity** using `Readme-Workflows/recent-activity@main`
-2. **Update timestamp** to show the latest update time
-3. **Commit and push** changes to `README.md`
-4. **Sync** automatically to GitHub Pages via `index.md`
+2. **Generate recent commit changelog** from `git log`
+3. **Update timestamps** to show the latest update/deployment time
+4. **Commit and push** changes to `README.md`
+5. **Sync** automatically to GitHub Pages via `index.md`
 
 ---
 
-## 🪄 Technology Stack
-
-| Category | Tool / Service | Description |
-|-----------|----------------|-------------|
-| CI/CD | **GitHub Actions** | Automates build, test, and deploy pipelines |
-| Hosting | **GitHub Pages** | Hosts static content directly from the repo |
-| Data Source | **GitHub API** | Provides recent activity data |
-| Formatter | **Markdown + Liquid (Jekyll)** | Generates the web layout dynamically |
-
----
-
-## 💡 How It Works
+## 🧠 How It Works
 
 ```mermaid
 flowchart TD
     A[Schedule or Manual Trigger] --> B[GitHub Action Runs]
     B --> C[Fetch Recent Activity]
-    C --> D[Update README.md]
-    D --> E[Commit & Push Changes]
-    E --> F[GitHub Pages Deploys Updated Site]
+    C --> D[Generate Commit Log]
+    D --> E[Update README Timestamps]
+    E --> F[Commit & Push Changes]
+    F --> G[GitHub Pages Deploys Updated Site]
