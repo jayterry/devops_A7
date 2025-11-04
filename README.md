@@ -1,52 +1,52 @@
-🌐 My DevOps GitHub Pages
+# 🌐 My DevOps GitHub Pages
 
-Welcome to my automated GitHub Pages site!
-This project showcases continuous integration (CI) and content automation using GitHub Actions.
-
+Welcome to my automated GitHub Pages site!  
+This project demonstrates continuous integration and content automation using **GitHub Actions**.  
 Every few hours, this page automatically updates with my latest GitHub activities 🚀
 
-🧩 About This Project
+---
 
-This project was created as part of the DevOps Assignment: Publish with GitHub Pages + Auto Activity Log, demonstrating the use of automation pipelines to keep content fresh and synchronized.
+## 🧩 About This Project
 
-🎯 Objectives
+This project was created as part of the **DevOps Assignment: Publish with GitHub Pages + Auto Activity Log**.
 
-Automate README updates using GitHub Actions
+### 🎯 Objectives
+- Automate README updates using GitHub Actions.
+- Display real-time GitHub activity logs.
+- Generate automatic changelog based on commits.
+- Sync README content to GitHub Pages automatically.
+- Demonstrate CI/CD workflow integration.
 
-Display real-time GitHub activity logs
+---
 
-Generate an automatic changelog from commits
+## ✨ My GitHub Activity Log
 
-Sync README content to GitHub Pages automatically
+Here’s a list of my latest GitHub activities automatically updated every few hours 🚀  
 
-Demonstrate CI/CD workflow integration
+<!--RECENT_ACTIVITY:start-->
+<!--RECENT_ACTIVITY:end-->
 
-✨ My GitHub Activity Log
+---
 
-Here’s a list of my latest GitHub activities, updated automatically every few hours 🚀
+## 🧾 Recent Commits
 
-<!--RECENT_ACTIVITY:start--> <!--RECENT_ACTIVITY:end-->
-🧾 Recent Commits
+Below are the 5 most recent commits automatically pulled from this repository 🔄  
 
-Below are the five most recent commits automatically pulled from this repository 🔄
+<!--COMMITS:start-->
+<!--COMMITS:end-->
 
-<!--COMMITS:start--> <!--COMMITS:end-->
-⚙️ Workflow Overview
+---
 
-The automation process is managed by
-.github/workflows/activity-log.yml, which performs the following tasks:
+## ⚙️ Workflow Overview
 
-Fetches recent activity using Readme-Workflows/activity-config@main
+The automation process uses a custom workflow file  
+located at **`.github/workflows/activity-log.yml`**, which performs:
 
-Generates a recent commit changelog from git log
+1. **Fetch recent activity** using `Readme-Workflows/recent-activity@main`
+2. **Generate recent commit changelog** from `git log`
+3. **Update timestamps** to show the latest update/deployment time
+4. **Commit and push** changes to `README.md`
+5. **Sync** automatically to GitHub Pages via `index.md`
 
-Updates timestamps to reflect the latest update and deployment
+---
 
-Commits and pushes the changes to README.md
-
-Syncs the README content automatically to GitHub Pages via index.md
-
-🕒 Deployment Status
-
-📅 Last updated: YYYY-MM-DD HH:MM:SS (UTC+8)
-🚀 Last deployed: YYYY-MM-DD HH:MM:SS (UTC+8)
