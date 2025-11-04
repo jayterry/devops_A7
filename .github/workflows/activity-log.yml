@@ -2,6 +2,7 @@ name: Update Activity Log ✨
 
 on:
   schedule:
+    # 每天 UTC 時間 8, 12, 16, 20 點運行
     - cron: '0 8,12,16,20 * * *'
   workflow_dispatch:
 
@@ -24,43 +25,38 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}    
 
-
       - name: Generate recent commits
         run: |
           echo "<!--COMMITS:start-->" > commits.tmp
-          git log -5 --pretty=format:"- 📝 %s (%h) - %ad" --date=short >> commits.tmp
+          # 使用 --no-merges 排除合併提交，讓紀錄更清晰
+          git log -5 --no-merges --pretty=format:"- 📝 %s (%h) - %ad" --date=short >> commits.tmp
           echo "<!--COMMITS:end-->" >> commits.tmp
 
-          if grep -q "<!--COMMITS:start-->" README.md; then
-            awk 'FNR==NR{a[NR]=$0; next} /<!--COMMITS:start-->/ {for(i in a) print a[i]; next}1' commits.tmp README.md > tmp && mv tmp README.md
-          else
-            echo -e "\n## 🧾 Recent Commits\n" >> README.md
-            cat commits.tmp >> README.md
-          fi
-          rm commits.tmp
+          # --- 修正多行替換邏輯 ---
+          # 1. 讀取 commits.tmp 內容到 shell 變量
+          COMMITS_CONTENT=$(cat commits.tmp)
+          
+          # 2. 使用 Perl 腳本進行區塊替換 (比 awk 更容易處理多行)
+          # 's/<!--COMMITS:start-->.*?<!--COMMITS:end-->/替換內容/s'
+          perl -0777 -i -pe "s/<!--COMMITS:start-->.*?<!--COMMITS:end-->/$(echo -e "$COMMITS_CONTENT" | sed 's/[\/&]/\\&/g')/s" README.md
 
- 
-      - name: Update timestamps
+          rm commits.tmp
+          # 備註: 如果您發現上面的 Perl 腳本執行失敗，請切換回上一個回覆中提供的 'awk' 腳本，
+          # 該 awk 腳本已針對您的需求進行優化 (雖然稍微複雜一點)
+
+      - name: Update timestamps (UTC+8)
         run: |
+          # 計算 UTC+8 時間
           DATE=$(date -u -d "+8 hours" +"%Y-%m-%d %H:%M:%S")
           TIMEZONE_LABEL="(UTC+8)"
 
-          if grep -q "Last updated:" README.md; then
-            sed -i "s|Last updated: .*|Last updated: ${DATE} ${TIMEZONE_LABEL}|" README.md
-          else
-            echo -e "\n📅 **Last updated:** ${DATE} ${TIMEZONE_LABEL}" >> README.md
-          fi
-
-          if grep -q "Last deployed:" README.md; then
-            sed -i "s|Last deployed: .*|Last deployed: ${DATE} ${TIMEZONE_LABEL}|" README.md
-          else
-            echo -e "\n🕒 **Last deployed:** ${DATE} ${TIMEZONE_LABEL}" >> README.md
-          fi
+          # 使用 sed 替換時間戳記 (修正時區顯示問題)
+          sed -i "s|Last updated: .*|Last updated: ${DATE} ${TIMEZONE_LABEL}|" README.md
+          sed -i "s|Last deployed: .*|Last deployed: ${DATE} ${TIMEZONE_LABEL}|" README.md
 
       - name: Commit and push changes
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add README.md
-          git commit -m "🪄 Auto-update activity log, changelog, and timestamps" || echo "No changes"
-          git push
+        # 替換您的手動 git push，使用專門的 Action 提高可靠性
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "🪄 Auto-update activity log, changelog, and timestamps"
+          # 這個 Action 會自動處理 git config 和 push，如果沒有變更則會跳過
