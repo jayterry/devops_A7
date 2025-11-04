@@ -16,40 +16,51 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 🪄 Step 1. 生成 GitHub 最近活動（使用替代 action）
       - name: Generate recent activity
-        uses: jamesgeorge007/github-activity-readme@master
+        uses: Readme-Workflows/recent-activity@main
         with:
-          COMMIT_MSG: "⚡ Update recent GitHub activity"
-          MAX_LINES: 10
           GH_USERNAME: jayterry
+          CONFIG_FILE: .github/activity-config.yml
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}    
 
-      # 🧾 Step 2. 生成最近 commit 記錄
+
       - name: Generate recent commits
         run: |
           echo "<!--COMMITS:start-->" > commits.tmp
-          git log -5 --no-merges --pretty=format:"- 📝 %s (%h) - %ad" --date=short >> commits.tmp
+          git log -5 --pretty=format:"- 📝 %s (%h) - %ad" --date=short >> commits.tmp
           echo "<!--COMMITS:end-->" >> commits.tmp
-          COMMITS_CONTENT=$(cat commits.tmp)
-          perl -0777 -i -pe "s/<!--COMMITS:start-->.*?<!--COMMITS:end-->/$(echo -e "$COMMITS_CONTENT" | sed 's/[\/&]/\\&/g')/s" README.md
+
+          if grep -q "<!--COMMITS:start-->" README.md; then
+            awk 'FNR==NR{a[NR]=$0; next} /<!--COMMITS:start-->/ {for(i in a) print a[i]; next}1' commits.tmp README.md > tmp && mv tmp README.md
+          else
+            echo -e "\n## 🧾 Recent Commits\n" >> README.md
+            cat commits.tmp >> README.md
+          fi
           rm commits.tmp
 
-      # ⏰ Step 3. 更新時間戳（UTC+8）
-      - name: Update timestamps (UTC+8)
-        shell: bash
+ 
+      - name: Update timestamps
         run: |
-          DATE=$(TZ='Asia/Taipei' date '+%Y-%m-%d %H:%M:%S')
+          DATE=$(date -u -d "+8 hours" +"%Y-%m-%d %H:%M:%S")
           TIMEZONE_LABEL="(UTC+8)"
-          echo "🕒 Current time: $DATE $TIMEZONE_LABEL"
-          sed -i 's/\r$//' README.md
-          perl -0777 -i -pe "s/📅 *Last updated:[^\n]*/📅 Last updated: ${DATE} ${TIMEZONE_LABEL}/" README.md
-          perl -0777 -i -pe "s/🚀 *Last deployed:[^\n]*/🚀 Last deployed: ${DATE} ${TIMEZONE_LABEL}/" README.md
-          grep 'Last' README.md || echo '⚠️ No "Last updated" found in README.md'
 
-      # ✅ Step 4. 自動 commit & push
+          if grep -q "Last updated:" README.md; then
+            sed -i "s|Last updated: .*|Last updated: ${DATE} ${TIMEZONE_LABEL}|" README.md
+          else
+            echo -e "\n📅 **Last updated:** ${DATE} ${TIMEZONE_LABEL}" >> README.md
+          fi
+
+          if grep -q "Last deployed:" README.md; then
+            sed -i "s|Last deployed: .*|Last deployed: ${DATE} ${TIMEZONE_LABEL}|" README.md
+          else
+            echo -e "\n🕒 **Last deployed:** ${DATE} ${TIMEZONE_LABEL}" >> README.md
+          fi
+
       - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "🪄 Auto-update activity log, changelog, and timestamps"
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add README.md
+          git commit -m "🪄 Auto-update activity log, changelog, and timestamps" || echo "No changes"
+          git push
