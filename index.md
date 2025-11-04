@@ -9,9 +9,4 @@ This page updates itself with my recent activity logs via GitHub Actions. 🚀
 
 ---
 
-## ✨ Recent Activity
-
-<!--RECENT_ACTIVITY:start-->
-<!--RECENT_ACTIVITY:end-->
-
-🕒 **Last updated:** (自動生成時間)
+{% include_relative README.md %}
