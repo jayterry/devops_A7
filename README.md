@@ -57,16 +57,7 @@ located at **`.github/workflows/activity-log.yml`**, which performs:
 
 ---
 
-## 🧠 How It Works
 
-```mermaid
-flowchart TD
-    A[Schedule or Manual Trigger] --> B[GitHub Action Runs]
-    B --> C[Fetch Recent Activity]
-    C --> D[Generate Commit Log]
-    D --> E[Update README Timestamps]
-    E --> F[Commit & Push Changes]
-    F --> G[GitHub Pages Deploys Updated Site]
 
 📅 **Last updated:** 2025-11-04 14:14:53 (UTC)
 
