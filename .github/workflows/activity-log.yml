@@ -2,7 +2,6 @@ name: Update Activity Log ✨
 
 on:
   schedule:
-    # 每天 UTC 時間 8, 12, 16, 20 點運行
     - cron: '0 8,12,16,20 * * *'
   workflow_dispatch:
 
@@ -17,50 +16,40 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 🪄 Step 1. 生成 GitHub 最近活動（使用替代 action）
       - name: Generate recent activity
-        uses: Readme-Workflows/recent-activity@main
+        uses: jamesgeorge007/github-activity-readme@master
         with:
+          COMMIT_MSG: "⚡ Update recent GitHub activity"
+          MAX_LINES: 10
           GH_USERNAME: jayterry
-          CONFIG_FILE: .github/activity-config.yml
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}    
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
+      # 🧾 Step 2. 生成最近 commit 記錄
       - name: Generate recent commits
         run: |
           echo "<!--COMMITS:start-->" > commits.tmp
-          # 使用 --no-merges 排除合併提交，讓紀錄更清晰
           git log -5 --no-merges --pretty=format:"- 📝 %s (%h) - %ad" --date=short >> commits.tmp
           echo "<!--COMMITS:end-->" >> commits.tmp
-
-          # --- 修正多行替換邏輯 ---
-          # 1. 讀取 commits.tmp 內容到 shell 變量
           COMMITS_CONTENT=$(cat commits.tmp)
-          
-          # 2. 使用 Perl 腳本進行區塊替換 (比 awk 更容易處理多行)
-          # 's/<!--COMMITS:start-->.*?<!--COMMITS:end-->/替換內容/s'
           perl -0777 -i -pe "s/<!--COMMITS:start-->.*?<!--COMMITS:end-->/$(echo -e "$COMMITS_CONTENT" | sed 's/[\/&]/\\&/g')/s" README.md
-
           rm commits.tmp
-          # 備註: 如果您發現上面的 Perl 腳本執行失敗，請切換回上一個回覆中提供的 'awk' 腳本，
-          # 該 awk 腳本已針對您的需求進行優化 (雖然稍微複雜一點)
 
+      # ⏰ Step 3. 更新時間戳（UTC+8）
       - name: Update timestamps (UTC+8)
         shell: bash
         run: |
-          # 1️⃣ 取得台北時區的時間
           DATE=$(TZ='Asia/Taipei' date '+%Y-%m-%d %H:%M:%S')
           TIMEZONE_LABEL="(UTC+8)"
           echo "🕒 Current time: $DATE $TIMEZONE_LABEL"
-
-          # 2️⃣ 移除 CRLF，避免格式混亂
           sed -i 's/\r$//' README.md
-
-          # 3️⃣ 以 Perl 方式強制更新兩行（不論前後空格或換行符）
           perl -0777 -i -pe "s/📅 *Last updated:[^\n]*/📅 Last updated: ${DATE} ${TIMEZONE_LABEL}/" README.md
           perl -0777 -i -pe "s/🚀 *Last deployed:[^\n]*/🚀 Last deployed: ${DATE} ${TIMEZONE_LABEL}/" README.md
-
-          # 4️⃣ Debug output
-          echo '------ Updated lines ------'
           grep 'Last' README.md || echo '⚠️ No "Last updated" found in README.md'
-          echo '---------------------------'
 
+      # ✅ Step 4. 自動 commit & push
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "🪄 Auto-update activity log, changelog, and timestamps"
