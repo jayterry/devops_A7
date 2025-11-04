@@ -2,40 +2,65 @@ name: Update Activity Log ✨
 
 on:
   schedule:
-    - cron: '0 8,12,16,20 * * *'
+    - cron: '0 8,12,16,20 * * *'   # 每天 8:00、12:00、16:00、20:00 自動更新
   workflow_dispatch:
 
 permissions:
-  contents: write    # ✅ 讓 GitHub Token 有權限修改 README.md
+  contents: write    # 允許修改 README.md
 
 jobs:
   update:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 🪄 Step 1. 生成 GitHub 最近活動
       - name: Generate recent activity
         uses: Readme-Workflows/recent-activity@main
         with:
           GH_USERNAME: jayterry
           CONFIG_FILE: .github/activity-config.yml
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}   # 
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}   
 
-      - name: Update timestamp
+      # 🧾 Step 2. 生成最近 commit 記錄（Changelog）
+      - name: Generate recent commits
         run: |
-          DATE=$(date +"%Y-%m-%d %H:%M:%S")
+          echo "<!--COMMITS:start-->" > commits.tmp
+          git log -5 --pretty=format:"- 📝 %s (%h) - %ad" --date=short >> commits.tmp
+          echo "<!--COMMITS:end-->" >> commits.tmp
+
+          if grep -q "<!--COMMITS:start-->" README.md; then
+            awk 'FNR==NR{a[NR]=$0; next} /<!--COMMITS:start-->/ {for(i in a) print a[i]; next}1' commits.tmp README.md > tmp && mv tmp README.md
+          else
+            echo -e "\n## 🧾 Recent Commits\n" >> README.md
+            cat commits.tmp >> README.md
+          fi
+          rm commits.tmp
+
+      # 🕒 Step 3. 更新時間戳與部署時間
+      - name: Update timestamps
+        run: |
+          DATE=$(date -u +"%Y-%m-%d %H:%M:%S")   # ✅ 改成 -u，確保是 UTC 時間
           if grep -q "Last updated:" README.md; then
             sed -i "s|Last updated: .*|Last updated: ${DATE} (UTC)|" README.md
           else
-            echo -e "\n\n🕒 **Last updated:** ${DATE} (UTC)" >> README.md
+            echo -e "\n📅 **Last updated:** ${DATE} (UTC)" >> README.md
           fi
 
+          if grep -q "Last deployed:" README.md; then
+            sed -i "s|Last deployed: .*|Last deployed: ${DATE} (UTC)|" README.md
+          else
+            echo -e "\n🕒 **Last deployed:** ${DATE} (UTC)" >> README.md
+          fi
+
+      # 🚀 Step 4. Commit 並推回 main
       - name: Commit and push changes
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add README.md
-          git commit -m "🪄 Auto-update activity log + timestamp" || echo "No changes"
+          git commit -m "🪄 Auto-update activity log, changelog, and timestamps" || echo "No changes"
           git push
