@@ -20,6 +20,8 @@ jobs:
         with:
           GH_USERNAME: jayterry
           CONFIG_FILE: .github/activity-config.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}   # 
 
       - name: Update timestamp
         run: |
