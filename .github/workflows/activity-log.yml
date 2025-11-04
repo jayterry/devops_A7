@@ -45,18 +45,14 @@ jobs:
           # 該 awk 腳本已針對您的需求進行優化 (雖然稍微複雜一點)
 
       - name: Update timestamps (UTC+8)
+        shell: bash
         run: |
-          # 計算 UTC+8 時間
-          DATE=$(date -u -d "+8 hours" +"%Y-%m-%d %H:%M:%S")
+          # 取得台北時區的時間 (UTC+8)
+          DATE=$(TZ="Asia/Taipei" date +"%Y-%m-%d %H:%M:%S")
           TIMEZONE_LABEL="(UTC+8)"
+          echo "🕒 Current time: $DATE $TIMEZONE_LABEL"
 
-          # 使用 sed 替換時間戳記 (修正時區顯示問題)
-          sed -i "s|Last updated: .*|Last updated: ${DATE} ${TIMEZONE_LABEL}|" README.md
-          sed -i "s|Last deployed: .*|Last deployed: ${DATE} ${TIMEZONE_LABEL}|" README.md
+          # 精準替換 README 裡的時間段落（保持 emoji 一致）
+          sed -i "s|^📅 Last updated:.*|📅 Last updated: ${DATE} ${TIMEZONE_LABEL}|" README.md
+          sed -i "s|^🚀 Last deployed:.*|🚀 Last deployed: ${DATE} ${TIMEZONE_LABEL}|" README.md
 
-      - name: Commit and push changes
-        # 替換您的手動 git push，使用專門的 Action 提高可靠性
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "🪄 Auto-update activity log, changelog, and timestamps"
-          # 這個 Action 會自動處理 git config 和 push，如果沒有變更則會跳過
