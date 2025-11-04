@@ -38,6 +38,8 @@ Here’s a list of my latest GitHub activities automatically updated every few h
 Below are the 5 most recent commits automatically pulled from this repository 🔄  
 
 <!--COMMITS:start-->
+- 📝 ⚡ Update README with the recent activity (95bdf14) - 2025-11-04
+- 📝 Update README.md (684b596) - 2025-11-05\n<!--COMMITS:end-->
 <!--COMMITS:end-->
 
 ---
@@ -55,3 +57,7 @@ located at **`.github/workflows/activity-log.yml`**, which performs:
 
 ---
 
+
+📅 **Last updated:** 2025-11-04 16:04:57 (UTC+8)
+
+🕒 **Last deployed:** 2025-11-04 16:04:57 (UTC+8)
