@@ -1,112 +1,116 @@
-/*
- * Pac-Man 復古迷宮風格 CSS
- * 特點：深色背景、螢光藍色邊框牆壁、白色圓點。
+/* ----------------------------------------------------
+ * Project Style: Pixel Retro Game / Terminal Theme
+ * Target: README.md content rendered via index.md
+ * ----------------------------------------------------
  */
 
-/* 定義顏色變數，方便調整 */
-:root {
-    --color-background: #000000;      /* 黑色背景 */
-    --color-wall: #0000FF;            /* 經典藍色牆壁 */
-    --color-wall-glow: #00FFFF;        /* 青藍色光暈 */
-    --color-pellet: #FFFFFF;          /* 白色小豆子 */
-    --color-power-pellet: #FFD700;    /* 金黃色力量豆 */
-    --color-text: #FFD700;            /* 黃色分數文字 */
-    --font-retro: 'Press Start 2P', 'Courier New', monospace;
+/* 1. 全局和字體設置 */
+body {
+    /* 使用深色背景 */
+    background-color: #0d0d0d; 
+    /* 像素/終端機風格字體 */
+    font-family: 'Monospace', monospace; 
+    color: #00ff41; /* 螢光綠色文字 */
+    line-height: 1.6;
+    padding: 20px;
+    margin: 0;
+    /* 讓內容在頁面中央，並給予最大寬度 */
+    max-width: 900px; 
+    margin: 0 auto; 
+    /* 模擬 CRT 螢幕掃描線效果 (輕微模糊的發光效果) */
+    text-shadow: 0 0 1px #00ff41, 0 0 2px rgba(0, 255, 65, 0.4); 
 }
 
-/* 1. 遊戲區域容器 (模擬迷宮外框) */
-.maze-container {
-    background-color: var(--color-background);
-    width: 600px; /* 迷宮寬度 */
-    height: 400px; /* 迷宮高度 */
-    margin: 50px auto;
-    /* 模擬牆壁的藍色發光邊框 */
-    border: 3px solid var(--color-wall);
-    box-shadow: 0 0 15px var(--color-wall-glow); /* 發光效果 */
-    position: relative;
-    overflow: hidden;
-    border-radius: 5px; /* 輕微圓角 */
+/* 移除預設的 Markdown 樣式干擾 */
+a {
+    color: #00ffff; /* 青色連結 */
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+    transition: color 0.3s;
 }
 
-/* 2. 簡化牆壁/路徑樣式 (使用 DIV 模擬內部線條，如果不需要複雜結構可移除此區塊) */
-.maze-wall-segment {
-    position: absolute;
-    background-color: transparent; /* 內部透明 */
-    border: 3px solid var(--color-wall);
-    border-radius: 8px; /* 圓角邊框 */
-    box-shadow: 0 0 8px var(--color-wall-glow);
+a:hover {
+    color: #fff;
+    border-bottom-color: #fff;
 }
 
-/* 範例：內部 L 形牆壁 (需要搭配 HTML 元素) */
-/*
-.wall-horizontal { top: 100px; left: 50px; width: 150px; height: 0; }
-.wall-vertical { top: 100px; left: 200px; width: 0; height: 100px; }
-*/
-
-/* 3. 豆子 (Pellet) 樣式 */
-.pellet {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background-color: var(--color-pellet);
-    border-radius: 50%;
-    /* 確保豆子在黑暗背景下可見 */
-    box-shadow: 0 0 2px var(--color-pellet);
+/* 2. 標題樣式 (Title Styles) */
+h1, h2, h3, h4 {
+    color: #00ffff; /* 青色標題 */
+    border-bottom: 2px solid #00ff41; /* 底部螢光綠邊框 */
+    padding-bottom: 5px;
+    margin-top: 30px;
+    font-weight: bold;
+    /* 標題發光效果 */
+    text-shadow: 0 0 5px #00ffff, 0 0 10px rgba(0, 255, 255, 0.6); 
 }
 
-/* 力量豆 (Power Pellet) 樣式 */
-.power-pellet {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: var(--color-power-pellet);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--color-power-pellet);
-    /* 閃爍動畫，增加電玩感 */
-    animation: pellet-pulse 0.8s infinite alternate;
-}
-
-@keyframes pellet-pulse {
-    from {
-        opacity: 1;
-        transform: scale(1.0);
-    }
-    to {
-        opacity: 0.6;
-        transform: scale(1.2);
-    }
-}
-
-/* 4. 文本/計分板樣式 */
-.score-display {
-    font-family: var(--font-retro);
-    color: var(--color-text);
-    font-size: 1.2em;
+h1 {
+    font-size: 2.5em;
     text-align: center;
+    border-bottom: 4px double #00ff41;
+    padding: 10px 0;
+}
+
+/* 3. 區塊樣式 (Block Styles) */
+/* 讓整個 README 內容有一個復古框 */
+.markdown-body { 
+    padding: 20px;
+    border: 3px solid #00ff41;
+    box-shadow: 0 0 10px #00ff41;
+}
+
+/* 4. 清單與段落 */
+ul, ol {
+    margin-left: 20px;
+    list-style-type: '⚡ '; /* 使用閃電符號作為清單點 */
+    padding-left: 0;
+}
+
+/* 確保段落文字顏色正確 */
+p {
+    color: #00ff41;
     margin-bottom: 15px;
-    /* 復古文字陰影 */
-    text-shadow: 0 0 5px var(--color-text);
 }
 
-/* 5. Pac-Man 角色基礎樣式 */
-.pacman {
-    width: 30px;
-    height: 30px;
-    background-color: #FFFF00; /* 鮮豔黃色 */
-    border-radius: 50%;
-    /* 嘴巴開口效果 */
-    clip-path: polygon(50% 50%, 100% 35%, 100% 65%);
-    position: absolute;
-    z-index: 10;
+/* 5. 表格樣式 (活動日誌 / Recent Activity Table) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.9em;
+    /* 邊框看起來像數據格 */
+    border: 1px solid #00ff41; 
 }
 
-/* 6. 幽靈 (Ghost) 基礎樣式 */
-.ghost {
-    width: 30px;
-    height: 38px;
-    background-color: #FF0000; /* 例如 Blinky 紅色 */
-    border-radius: 50% 50% 0 0;
-    position: absolute;
-    z-index: 9;
-    border: 1px solid #FFF; /* 增加邊緣細節 */
+th, td {
+    padding: 8px 15px;
+    text-align: left;
+    border: 1px dashed #00ff41; /* 虛線分隔線 */
+}
+
+th {
+    background-color: rgba(0, 255, 65, 0.2); /* 輕微的綠色背景 */
+    color: #00ffff; /* 青色標題文字 */
+    font-weight: bold;
+}
+
+/* 6. 特殊資訊區塊 (Timestamps) */
+/* 讓時間戳記看起來像終端機狀態欄 */
+.last-updated, .last-deployed {
+    display: block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: rgba(0, 255, 65, 0.1);
+    border: 1px dashed #00ff41;
+    color: #00ff41;
+    font-size: 0.85em;
+}
+
+/* 7. 行內代碼區塊 (Inline Code) */
+code {
+    background-color: #333;
+    color: #ff00ff; /* 洋紅色代碼 */
+    padding: 2px 4px;
+    border-radius: 2px;
 }
