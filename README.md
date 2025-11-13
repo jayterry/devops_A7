@@ -24,9 +24,9 @@ This project was created as part of the **DevOps Assignment: Publish with GitHub
 Here’s a list of my latest GitHub activities automatically updated every few hours 🚀  
 
 <!--RECENT_ACTIVITY:start-->
-1. ⬆️ Pushed undefined commit(s) to [jayterry/devops_A7](https://github.com/jayterry/devops_A7)<br>
-2. ⬆️ Pushed undefined commit(s) to [jayterry/devops_A7](https://github.com/jayterry/devops_A7)<br>
-3. ⬆️ Pushed undefined commit(s) to [jayterry/devops_A7](https://github.com/jayterry/devops_A7)<br>
+1. ⬆️ Pushed undefined commit(s) to [jayterry/cloud](https://github.com/jayterry/cloud)<br>
+2. ⬆️ Pushed undefined commit(s) to [jayterry/cloud](https://github.com/jayterry/cloud)<br>
+3. ⬆️ Pushed undefined commit(s) to [jayterry/cloud](https://github.com/jayterry/cloud)<br>
 4. ⬆️ Pushed undefined commit(s) to [jayterry/devops_A7](https://github.com/jayterry/devops_A7)<br>
 5. ⬆️ Pushed undefined commit(s) to [jayterry/devops_A7](https://github.com/jayterry/devops_A7)<br>
 <!--RECENT_ACTIVITY:end-->
