@@ -25,10 +25,10 @@ Here’s a list of my latest GitHub activities automatically updated every few h
 
 <!--RECENT_ACTIVITY:start-->
 1. ⬆️ Pushed undefined commit(s) to [jayterry/A11](https://github.com/jayterry/A11)<br>
-2. 🤝 Became collaborator on [NEO1717/DevOps_A11](https://github.com/NEO1717/DevOps_A11)<br>
-3. ⬆️ Pushed undefined commit(s) to [jayterry/A10](https://github.com/jayterry/A10)<br>
+2. ⬆️ Pushed undefined commit(s) to [jayterry/A11](https://github.com/jayterry/A11)<br>
+3. 🤝 Became collaborator on [NEO1717/DevOps_A11](https://github.com/NEO1717/DevOps_A11)<br>
 4. ⬆️ Pushed undefined commit(s) to [jayterry/A10](https://github.com/jayterry/A10)<br>
-5. ⬆️ Pushed undefined commit(s) to [jayterry/cloud](https://github.com/jayterry/cloud)<br>
+5. ⬆️ Pushed undefined commit(s) to [jayterry/A10](https://github.com/jayterry/A10)<br>
 <!--RECENT_ACTIVITY:end-->
 
 ---
