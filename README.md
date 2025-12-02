@@ -25,8 +25,8 @@ Here’s a list of my latest GitHub activities automatically updated every few h
 
 <!--RECENT_ACTIVITY:start-->
 1. ⬆️ Pushed undefined commit(s) to [jayterry/cloud-midterm](https://github.com/jayterry/cloud-midterm)<br>
-2. ⬆️ Pushed undefined commit(s) to [jayterry/A11](https://github.com/jayterry/A11)<br>
-3. ⬆️ Pushed undefined commit(s) to [jayterry/A11](https://github.com/jayterry/A11)<br>
+2. ⬆️ Pushed undefined commit(s) to [jayterry/cloud-midterm](https://github.com/jayterry/cloud-midterm)<br>
+3. ⬆️ Pushed undefined commit(s) to [jayterry/cloud-midterm](https://github.com/jayterry/cloud-midterm)<br>
 4. ⬆️ Pushed undefined commit(s) to [jayterry/A11](https://github.com/jayterry/A11)<br>
 5. ⬆️ Pushed undefined commit(s) to [jayterry/A11](https://github.com/jayterry/A11)<br>
 <!--RECENT_ACTIVITY:end-->
